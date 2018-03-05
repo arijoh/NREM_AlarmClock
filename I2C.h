@@ -2,6 +2,9 @@
 
 #ifndef I2C_H_
 #define I2C_H_
+//komment
+
+
 
 
 // I2C (TWI) ROUTINES
