@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------
 // INCLUDES
 #include <avr/io.h> // deal with port registers
-#include <util/delay.h> // used for _delay_ms function
+//#include <util/delay.h> // used for _delay_ms function
 #include <string.h> // string manipulation routines
 #include <stdlib.h>
 // ---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ typedef uint8_t byte; // I just like byte
 
 
 void setPorts();
-void msDelay(int delay); // put into a routine
+void msDelay(unsigned int uiS ); // put into a routine
 void FlashLED();
 void PulseEnableLine ();
 void SendNibble(byte data);

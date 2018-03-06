@@ -5,10 +5,20 @@ void setPorts()
  DDRB = 0x3F; // 0011.1111; set B0-B5 as outputs
  DDRC = 0x00; // 0000.0000; set PORTC as inputs
 }
+/*
 void msDelay(int delay) // put into a routine
 { // to remove code inlining
  for (int i=0;i<delay;i++) // at cost of timing accuracy
- _delay_ms(1);
+ $$$_delay_ms(1);
+}*/
+void msDelay(unsigned int uiS ) //delay function
+{
+	unsigned volatile long ulMax , ulCount ;
+	ulMax = 3800 * uiS ;
+	ulCount=0;
+	while (ulCount != ulMax ) {
+		ulCount++;
+	}
 }
 void FlashLED()
 {
@@ -22,7 +32,7 @@ void FlashLED()
 void PulseEnableLine ()
 {
  SetBit(PORTB,LCD_E); // take LCD enable line high
- _delay_us(40); // wait 40 microseconds
+ msDelay(4); // wait 40 microseconds
  ClearBit(PORTB,LCD_E); // take LCD enable line low
 }
 void SendNibble(byte data)

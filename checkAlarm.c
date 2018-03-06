@@ -90,13 +90,13 @@ void alarm()
 		LCD_Clear();
 		LCD_String("Wake up!");
 		PORTC = 0xff;        // Turn ON the Buzzer conneted to PORTC
-		_delay_ms(250);      // Wait for some time
+		msDelay(250);      // Wait for some time
 		if (PIND & (1 << PD7))
 		{
 			sound = 0;
 		}
 		PORTC = 0x00;        // Turn OFF the Buzzer connected to PORTC
-		_delay_ms(250);      // Wait for some time
+		msDelay(250);      // Wait for some time
 		if (PIND & (1 << PD7))
 		{
 
