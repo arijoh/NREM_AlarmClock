@@ -12,6 +12,8 @@ extern int alarmH;
 extern int state;
 extern int sound;
 
+
+
 void setupInterrupt();//interrupt functions
 ISR (INT0_vect);
 
@@ -29,6 +31,11 @@ void changeTimeM();
 void ConfirmTimechange();
 void resetTime();
 
+void setDateSet();
+void setYear();
+void setMonth();
+void setDateDate();
 
+void datePrint(int data,int month,int date);
 
 #endif /* BUTTONSTATES_H_ */

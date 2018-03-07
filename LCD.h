@@ -7,29 +7,26 @@
 #define DAT5 3 // pin for d5
 #define DAT6 4 // pin for d6
 #define DAT7 5 // pin for d7
-// The following defines are HD44780 controller commands
 
 
-// GLOBAL DEFINES
 #define F_CPU 16000000L // run CPU at 16 MHz
 #define LED 5 // Boarduino LED on PB5
 #define ClearBit(x,y) x &= ~_BV(y) // equivalent to cbi(x,y)
 #define SetBit(x,y) x |= _BV(y) // equivalent to sbi(x,y)
-// ---------------------------------------------------------------------------
-// INCLUDES
+
+
 #include <avr/io.h> // deal with port registers
-//#include <util/delay.h> // used for _delay_ms function
-#include <string.h> // string manipulation routines
-#include <stdlib.h>
-// ---------------------------------------------------------------------------
-// TYPEDEFS
+
 typedef uint8_t byte; // I just like byte
 
 
-
+void int_itoa( int n , char s[]);
+int int_stringlen(char s[]);
+void int_reverse(char s[]);
 
 void setPorts();
-void msDelay(unsigned int uiS ); // put into a routine
+void msDelay(long unsigned int miS ); // put into a routine
+void usDelay(long unsigned int uiS ); //delay function
 void FlashLED();
 void PulseEnableLine ();
 void SendNibble(byte data);

@@ -4,8 +4,7 @@
 #include "buttonstates.h"
 #include "checkAlarm.h"
 
-// ---------------------------------------------------------------------------
-// MAIN PROGRAM
+
 int main(void)
 {
 	setPorts(); // set port output for LCD
@@ -32,10 +31,14 @@ int main(void)
 		{
 			setAlarmState();
 		}
-		else
+		else if (state == 3)
 		{
 			setTimeState();
 		}
+		else{
+			setDateState();
+		}
+
 
 	}
 }

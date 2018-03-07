@@ -11,6 +11,12 @@ int hour;
 int min;
 int sound;
 
+int year = 18;
+int month = 1;
+int date = 1;
+
+int oldyear = 3, oldmonth = 3, olddate = 3;
+
 void setupInterrupt() {
 	DDRD &= ~(1 << DDD2);     // Clear the PD2 pin
 	// PD2 (PCINT0 pin) is now an input
@@ -27,7 +33,7 @@ ISR (INT0_vect) {
 	{
 		state++;
 	}
-	if (state > 3)
+	if (state > 4)
 		state = 1;
 }
 
@@ -77,12 +83,15 @@ void setAlarmH() {
 		if ((PIND & (1 << PD7))) {
 			msDelay(50);
 			if ((PIND & (1 << PD7))) {
-				LCD_Cursor(0,0);
-				LCD_String("Hour set!      ");
-				msDelay(1000);
-				LCD_Clear();
-				LCD_String("Set alarm min:");
-				setAlarmM();
+				msDelay(50);
+				if ((PIND & (1 << PD7))) {
+					LCD_Cursor(0,0);
+					LCD_String("Hour set!      ");
+					msDelay(1000);
+					LCD_Clear();
+					LCD_String("Set alarm min:");
+					setAlarmM();
+				}
 			}
 		}
 	}
@@ -345,6 +354,201 @@ void resetTime()
 	//þarf að nota tvær int tölur á hex formati.
 	//eða, sameina tvær int tölur líktog á hex formati og henda þeim saman í int format.
 	//setTime(setHour, setMin, setSec);
+}
+
+void setDateState()
+{
+	LCD_Clear();
+	LCD_String("Set date?");
+	LCD_Cursor(0,1);
+	msDelay(50);
+
+	if ((PIND & (1 << PD7))) {
+		setYear();
+	}
+}
+
+void setYear()
+{
+
+	loopa = 1;
+
+	LCD_Clear();
+	LCD_String("Set year");
+
+	while(loopa == 1){
+		if ((PIND & (1 << PD6))) {
+			year++;
+			msDelay(100);
+		}
+
+		if ((PIND & (1 << PD5))) {
+			year--;
+			msDelay(100);
+		}
+
+		if (year > 99) {
+			year = 0;
+			msDelay(100);
+		}
+
+		else if (year < 0)
+		{
+			year = 99;
+			msDelay(100);
+		}
+
+		datePrint(year, month, date);
+
+		if ((PIND & (1 << PD7))) {
+			msDelay(50);
+			if ((PIND & (1 << PD7))) {
+				msDelay(50);
+				if ((PIND & (1 << PD7))) {
+					LCD_Cursor(0,0);
+					LCD_String("Year set!      ");
+					msDelay(1000);
+					LCD_Clear();
+					LCD_String("Set Month:");
+					setMonth();
+				}
+			}
+		}
+	}
 
 }
 
+void datePrint(int year,int month,int date)
+{
+	if ((year != oldyear) || (month != oldmonth) || (date != olddate))
+	{
+		msDelay(50);
+		LCD_Cursor(0, 1);
+
+		if (year < 10) {
+			LCD_Integer(0);
+			LCD_Integer(year);
+		}
+		else if (year >= 10) {
+			LCD_Integer(year);
+		}
+
+		LCD_String(".");
+
+		if (month < 10) {
+			LCD_Integer(0);
+			LCD_Integer(month);
+		}
+		else if (month >= 10) {
+			LCD_Integer(month);
+		}
+
+		LCD_String(".");
+
+		if (date < 10) {
+			LCD_Integer(0);
+			LCD_Integer(date);
+		}
+		else if (date >= 10) {
+			LCD_Integer(date);
+		}
+	}
+
+	oldyear = year;
+	oldmonth = month;
+	olddate = date;
+}
+
+void setMonth()
+{
+	LCD_Clear();
+	LCD_String("Set Month");
+
+	while(loopa == 1){
+		if ((PIND & (1 << PD6))) {
+			month++;
+			msDelay(100);
+		}
+
+		if ((PIND & (1 << PD5))) {
+			month--;
+			msDelay(100);
+		}
+
+		if (month > 12) {
+			month = 0;
+			msDelay(100);
+		}
+
+		else if (month < 0)
+		{
+			month = 12;
+			msDelay(100);
+		}
+
+		datePrint(year, month, date);
+
+		if ((PIND & (1 << PD7))) {
+			msDelay(50);
+			if ((PIND & (1 << PD7))) {
+				msDelay(50);
+				if ((PIND & (1 << PD7))) {
+					LCD_Cursor(0,0);
+					LCD_String("Month set!     ");
+					msDelay(1000);
+					LCD_Clear();
+					LCD_String("Set Date:");
+					setDateDate();
+				}
+			}
+		}
+	}
+}
+
+
+void setDateDate()
+{
+
+	LCD_Clear();
+	LCD_String("Set Date");
+
+	while(loopa == 1){
+		if ((PIND & (1 << PD6))) {
+			date++;
+			msDelay(100);
+		}
+
+		if ((PIND & (1 << PD5))) {
+			date--;
+			msDelay(100);
+		}
+
+		if (date > 31) {
+			date = 0;
+			msDelay(100);
+		}
+
+		else if (date < 0)
+		{
+			date = 31;
+			msDelay(100);
+		}
+
+		datePrint(year, month, date);
+
+		if ((PIND & (1 << PD7))) {
+			msDelay(50);
+			if ((PIND & (1 << PD7))) {
+				msDelay(50);
+				if ((PIND & (1 << PD7))) {
+					LCD_Cursor(0,0);
+					LCD_String("Date set!    ");
+					msDelay(3000);
+					LCD_Clear();
+					loopa = 0;
+					state = 1;
+				}
+			}
+		}
+	}
+}
