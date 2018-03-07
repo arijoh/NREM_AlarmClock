@@ -17,6 +17,7 @@ byte I2C_Detect(byte addr)
  while (!TW_READY); // wait
  return (TW_STATUS==0x18); // return 1 if found; 0 otherwise
 }
+//breyting
 byte I2C_FindDevice(byte start)
 // returns with address of first device found; 0=not found
 {
