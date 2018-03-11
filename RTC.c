@@ -6,7 +6,6 @@ void GetTime(byte *hours, byte *minutes, byte *seconds)
 	*hours = I2C_ReadRegister(DS1307,0x02);
 	*minutes = I2C_ReadRegister(DS1307,0x01);
 	*seconds = I2C_ReadRegister(DS1307,0x00);
-
 }
 void GetDate(byte *months, byte *days, byte *years)
 // returns months, days, and years in BCD format
@@ -20,18 +19,24 @@ void GetDay(byte *day)
 {
 	*day = I2C_ReadRegister(DS1307,0x03);
 }
-void setTime()
+void setTime(int data, int reg)
 // simple, hard-coded way to set the date.
 {
-	I2C_WriteRegister(DS1307,0x02, 0x20); // add 0x40 for PM
-	I2C_WriteRegister(DS1307,0x01, 0x30);
-	I2C_WriteRegister(DS1307,0x00, 0x00);
+	if (reg == 1)
+		I2C_WriteRegister(DS1307,0x02, data); // add 0x40 for PM
+	else if (reg == 2)
+		I2C_WriteRegister(DS1307,0x01, data);
+	else if (reg == 3)
+		I2C_WriteRegister(DS1307,0x00, data);
 }
-void setDate(char months[4], char days[4], char years[4])
+void setDate(int data, int reg)
 {
-	I2C_WriteRegister(DS1307,0x05, 0x02);
-	I2C_WriteRegister(DS1307,0x04, 0x25);
-	I2C_WriteRegister(DS1307,0x06, 0x18);
+	if (reg == 1)
+		I2C_WriteRegister(DS1307,0x06, data);
+	else if (reg == 2)
+		I2C_WriteRegister(DS1307,0x05, data);
+	else if (reg == 3)
+		I2C_WriteRegister(DS1307,0x04, data);
 }
 // ---------------------------------------------------------------------------
 // APPLICATION ROUTINES
@@ -71,32 +76,31 @@ void WriteDay()
 	byte day;
 	GetDay(&day);
 	WhichDay(day);
-
 }
 void WhichDay(int day)
 {
 	switch(day)
 	{
 	case 1:
-		LCD_String("Manudagur");
+		LCD_String("MON-");
 		break;
 	case 2:
-		LCD_String("Thridjudagur");
+		LCD_String("TUE-");
 		break;
 	case 3:
-		LCD_String("Midvikudagur");
+		LCD_String("WED-");
 		break;
 	case 4:
-		LCD_String("Fimtudagur");
+		LCD_String("THU-");
 		break;
 	case 5:
-		LCD_String("Fostudagur");
+		LCD_String("FRI-");
 		break;
 	case 6:
-		LCD_String("Laugardagur");
+		LCD_String("SAT-");
 		break;
 	case 7:
-		LCD_String("Sunnudagur");
+		LCD_String("SUN-");
 		break;
 	}
 }
@@ -105,7 +109,8 @@ void LCD_TimeDate()
 	LCD_Cursor(0,0);
 	WriteTime();
 	LCD_Cursor(0,1);
-	//WriteDate();
-	WriteDay();
+	//WriteDay();
+	LCD_Cursor(4,1);
+	WriteDate();
 }
 

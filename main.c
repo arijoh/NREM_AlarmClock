@@ -17,7 +17,7 @@ int main(void)
 	DDRD &= ~(1 << PD7);
 	DDRD &= ~(1 << PD6);
 	DDRD &= ~(1 << PD5);
-	//setTime();
+
 	while(1)
 	{
 		if(state == 1) {

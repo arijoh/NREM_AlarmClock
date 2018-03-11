@@ -313,48 +313,36 @@ void ConfirmTimechange()
 
 void resetTime()
 {
-	int h1, h2, m1, m2;
-
-	if (hour < 10){
-		h1 = 0;
-		h2 = hour;
-	}
-	else if (hour >= 10)
-	{
-		h1 = hour/10;
-		h2 = (hour%10);
-	}
-
-	if (min < 10){
-		m1 = 0;
-		m2 = min;
-	}
-	else if (min >= 10)
-	{
-		m1 = min/10;
-		m2 = (min%10);
-	}
-
-	char settingMin[4];
-	//char settingHour[4];
-
-	settingMin[0] = '0';
-	settingMin[1] = 'x';
-	settingMin[2] = (m1+'0');
-	settingMin[3] = (m2+'0');
-
-
-	//LCD_String(settingMin);
-	//msDelay(5000);
-
-	//setTime(settingMin, settingMin, settingMin);
-
-
-
-	//þarf að nota tvær int tölur á hex formati.
-	//eða, sameina tvær int tölur líktog á hex formati og henda þeim saman í int format.
-	//setTime(setHour, setMin, setSec);
+	RegisterSetter(hour, 1, 1);
+	RegisterSetter(min, 2, 1);
+	RegisterSetter(0, 3, 1);
 }
+
+void RegisterSetter(int data, int reg, int hvad)
+{
+	int newdata;
+
+	if (data < 10)
+		newdata = data;
+	else if ((9 < data) && (data <= 19))
+		newdata = data + 6;
+	else if ((19 < data) && (data <= 29))
+		newdata = data + 12;
+	else if ((29 < data) && (data <= 39))
+		newdata = data + 18;
+	else if ((39 < data) && (data <= 49))
+		newdata = data + 24;
+	else if ((49 < data) && (data <= 59))
+		newdata = data + 30;
+	else
+		newdata = data + 36;
+
+	if (hvad == 1)
+		setTime(newdata, reg);
+	else if (hvad == 2)
+		setDate(newdata, reg);
+}
+
 
 void setDateState()
 {
@@ -364,14 +352,18 @@ void setDateState()
 	msDelay(50);
 
 	if ((PIND & (1 << PD7))) {
-		setYear();
+		msDelay(150);
+		if ((PIND & (1 << PD7))) {
+			//setYear();
+			setDateDate();
+		}
 	}
 }
 
 void setYear()
 {
 
-	loopa = 1;
+
 
 	LCD_Clear();
 	LCD_String("Set year");
@@ -402,17 +394,19 @@ void setYear()
 
 		if ((PIND & (1 << PD7))) {
 			msDelay(50);
+
 			if ((PIND & (1 << PD7))) {
-				msDelay(50);
-				if ((PIND & (1 << PD7))) {
-					LCD_Cursor(0,0);
-					LCD_String("Year set!      ");
-					msDelay(1000);
-					LCD_Clear();
-					LCD_String("Set Month:");
-					setMonth();
-				}
+				LCD_Cursor(0,0);
+				LCD_String("Year set!      ");
+				RegisterSetter(year,1,2);
+				RegisterSetter(month,2,2);
+				RegisterSetter(date,3,2);
+				msDelay(3000);
+				LCD_Clear();
+				loopa = 0;
+				state = 1;
 			}
+
 		}
 	}
 
@@ -425,12 +419,13 @@ void datePrint(int year,int month,int date)
 		msDelay(50);
 		LCD_Cursor(0, 1);
 
-		if (year < 10) {
+
+		if (date < 10) {
 			LCD_Integer(0);
-			LCD_Integer(year);
+			LCD_Integer(date);
 		}
-		else if (year >= 10) {
-			LCD_Integer(year);
+		else if (date >= 10) {
+			LCD_Integer(date);
 		}
 
 		LCD_String(".");
@@ -445,12 +440,12 @@ void datePrint(int year,int month,int date)
 
 		LCD_String(".");
 
-		if (date < 10) {
+		if (year < 10) {
 			LCD_Integer(0);
-			LCD_Integer(date);
+			LCD_Integer(year);
 		}
-		else if (date >= 10) {
-			LCD_Integer(date);
+		else if (year >= 10) {
+			LCD_Integer(year);
 		}
 	}
 
@@ -476,11 +471,11 @@ void setMonth()
 		}
 
 		if (month > 12) {
-			month = 0;
+			month = 1;
 			msDelay(100);
 		}
 
-		else if (month < 0)
+		else if (month <= 0)
 		{
 			month = 12;
 			msDelay(100);
@@ -498,7 +493,7 @@ void setMonth()
 					msDelay(1000);
 					LCD_Clear();
 					LCD_String("Set Date:");
-					setDateDate();
+					setYear();
 				}
 			}
 		}
@@ -512,6 +507,8 @@ void setDateDate()
 	LCD_Clear();
 	LCD_String("Set Date");
 
+	loopa = 1;
+
 	while(loopa == 1){
 		if ((PIND & (1 << PD6))) {
 			date++;
@@ -524,11 +521,11 @@ void setDateDate()
 		}
 
 		if (date > 31) {
-			date = 0;
+			date = 1;
 			msDelay(100);
 		}
 
-		else if (date < 0)
+		else if (date <= 0)
 		{
 			date = 31;
 			msDelay(100);
@@ -543,10 +540,11 @@ void setDateDate()
 				if ((PIND & (1 << PD7))) {
 					LCD_Cursor(0,0);
 					LCD_String("Date set!    ");
-					msDelay(3000);
+					msDelay(1000);
 					LCD_Clear();
-					loopa = 0;
-					state = 1;
+					LCD_String("Set Month:");
+					setMonth();
+
 				}
 			}
 		}
