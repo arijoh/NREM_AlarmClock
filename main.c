@@ -9,7 +9,7 @@ int main(void)
 {
 	setPorts(); // set port output for LCD
 	LCD_Init(); // initialize HD44780 LCD controller
-	I2C_Init(); // set I2C clock frequency
+	setupI2C(); // set I2C clock frequency
 	LCD_Clear();
 	setupInterrupt();
 	sei();
@@ -23,8 +23,8 @@ int main(void)
 		if(state == 1) {
 			LCD_Clear();
 			LCD_TimeDate(); // put time & date on LCD
-			msDelay(500); // one second between updates
 			checkAlarm();
+			msDelay(1000); // one second between updates
 		}
 
 		else if  (state == 2)

@@ -9,7 +9,7 @@
 #define DAT7 5 // pin for d7
 
 
-#define F_CPU 16000000L // run CPU at 16 MHz
+#define Clock_frequency 16000000L // run CPU at 16 MHz
 #define LED 5 // Boarduino LED on PB5
 #define ClearBit(x,y) x &= ~_BV(y) // equivalent to cbi(x,y)
 #define SetBit(x,y) x |= _BV(y) // equivalent to sbi(x,y)
