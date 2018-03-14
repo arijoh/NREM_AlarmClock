@@ -38,6 +38,13 @@ void setDate(int data, int reg)
 	else if (reg == 3)
 		I2C_WriteRegister(DS1307,0x04, data);
 }
+
+void setDay(int data)
+{
+	I2C_WriteRegister(DS1307,0x03, data);
+}
+
+
 // ---------------------------------------------------------------------------
 // APPLICATION ROUTINES
 
@@ -109,7 +116,7 @@ void LCD_TimeDate()
 	LCD_Cursor(0,0);
 	WriteTime();
 	LCD_Cursor(0,1);
-	//WriteDay();
+	WriteDay();
 	LCD_Cursor(4,1);
 	WriteDate();
 }

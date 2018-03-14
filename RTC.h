@@ -12,6 +12,7 @@ void GetTime(byte *hours, byte *minutes, byte *seconds);
 void GetDate(byte *months, byte *days, byte *years);
 void setTime(int data, int reg);
 void setDate(int data, int reg);
+void setDay(int data);
 void LCD_TwoDigits(byte data);
 void WriteDate();
 void WriteTime();

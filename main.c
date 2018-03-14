@@ -35,8 +35,11 @@ int main(void)
 		{
 			setTimeState();
 		}
-		else{
+		else if (state == 4){
 			setDateState();
+		}
+		else{
+			setDayState();
 		}
 
 

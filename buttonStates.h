@@ -40,4 +40,7 @@ void datePrint(int data,int month,int date);
 
 void RegisterSetter(int data, int reg, int hvad);
 
+void setDayState();
+void setDayDay();
+
 #endif /* BUTTONSTATES_H_ */

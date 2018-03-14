@@ -15,6 +15,10 @@ int year = 18;
 int month = 1;
 int date = 1;
 
+
+int newdayint;
+int dayint = 1;
+
 int oldyear = 3, oldmonth = 3, olddate = 3;
 
 void setupInterrupt() {
@@ -33,7 +37,7 @@ ISR (INT0_vect) {
 	{
 		state++;
 	}
-	if (state > 4)
+	if (state > 5)
 		state = 1;
 }
 
@@ -341,6 +345,8 @@ void RegisterSetter(int data, int reg, int hvad)
 		setTime(newdata, reg);
 	else if (hvad == 2)
 		setDate(newdata, reg);
+	else if (hvad == 3)
+		setDay(newdata);
 }
 
 
@@ -548,5 +554,100 @@ void setDateDate()
 				}
 			}
 		}
+	}
+}
+
+void setDayState()
+{
+	LCD_Clear();
+	LCD_String("Set weekday?");
+	LCD_Cursor(0,1);
+	msDelay(50);
+
+	if ((PIND & (1 << PD7))) {
+		LCD_Clear();
+		msDelay(150);
+		if ((PIND & (1 << PD7))) {
+			msDelay(200);
+			setDayDay();
+		}
+	}
+}
+
+void setDayDay()
+{
+
+
+	LCD_String("Set day");
+	LCD_Cursor(0,1);
+	loopa = 1;
+
+	while(loopa == 1){
+
+		if ((PIND & (1 << PD6))) {
+			dayint++;
+			msDelay(100);
+			LCD_Cursor(0,1);
+		}
+
+		if ((PIND & (1 << PD5))) {
+			dayint--;
+			msDelay(100);
+			LCD_Cursor(0,1);
+		}
+
+		if (newdayint != dayint){
+			switch (dayint)
+			{
+			case 1: //Monday
+				LCD_String("MON");
+				msDelay(100);
+				break;
+			case 2: //Tuesday
+				LCD_String("TUE");
+				msDelay(100);
+				break;
+			case 3: //Wednesday
+				LCD_String("WED");
+				msDelay(100);
+				break;
+			case 4: //Thursday
+				LCD_String("THU");
+				msDelay(100);
+				break;
+			case 5: //Friday
+				LCD_String("FRI");
+				msDelay(100);
+				break;
+			case 6: //Saturday
+				LCD_String("SAT");
+				msDelay(100);
+				break;
+			case 7: //Sunday
+				LCD_String("SUN");
+				msDelay(100);
+				break;
+			case 8:
+				dayint = 1;
+				msDelay(100);
+				break;
+			}
+		}
+
+		newdayint = dayint;
+
+		if ((PIND & (1 << PD7))) {
+			msDelay(150);
+			if ((PIND & (1 << PD7))) {
+				RegisterSetter(dayint, 3, 3);
+				LCD_Cursor(0,0);
+				LCD_String("Weekday set! ");
+				msDelay(3000);
+				state = 1;
+				loopa = 0;
+				LCD_Clear();
+			}
+		}
+
 	}
 }
