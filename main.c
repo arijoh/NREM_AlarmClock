@@ -1,11 +1,12 @@
-#include "LCD.h"
-#include "RTC.h"
-#include "i2C.h"
-#include "buttonstates.h"
-#include "checkAlarm.h"
+//#include "LCD.h"
+//#include "RTC.h"
+//#include "i2C.h"
+//#include "buttonstates.h"
+//#include "checkAlarm.h"
 #include "setup.h"
 #include "stateRunner.h"
-#include "delay.h"
+//#include "delay.h"
+#include "accelerometer.h"
 
 
 
@@ -16,6 +17,7 @@ int main(void)
 	{
 		currentState();
 		//check accelerometer
+		movement();
 	}
 }
 

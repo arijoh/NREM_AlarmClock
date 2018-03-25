@@ -11,11 +11,22 @@ void setup()
 	setupI2C(); // set I2C clock frequency
 	LCD_Clear();
 	setupInterrupt();
+	InitUart();
 	sei();
 	DDRD &= ~(1 << PD2);
 	DDRD &= ~(1 << PD7);
 	DDRD &= ~(1 << PD6);
 	DDRD &= ~(1 << PD5);
+}
+
+void InitUart()  //set baud rate, enable tx,tx communications
+{
+	UBRR0H=0;
+	UBRR0L=207; //we select UBRR0L=207 for 4800 BAUD.
+
+	// enable receiver and transmitter , Rx complete interruptenable
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0) ;
+	UCSR0C=(1<<USBS0)|(3<<UCSZ00); // set frame format
 }
 
 void setPorts()

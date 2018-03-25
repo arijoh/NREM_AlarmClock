@@ -9,7 +9,6 @@ void currentState()
 		LCD_Clear();
 		LCD_TimeDate(); // put time & date on LCD
 		checkAlarm();
-		msDelay(1000); // one second between updates
 	}
 
 	else if  (state == 2)

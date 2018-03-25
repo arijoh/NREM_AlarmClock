@@ -1,0 +1,6 @@
+#ifndef SETALARMSTATE_H_
+#define SETALARMSTATE_H_
+
+
+
+#endif /* SETALARMSTATE_H_ */

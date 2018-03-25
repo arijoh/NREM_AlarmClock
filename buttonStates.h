@@ -14,7 +14,7 @@ int sound;
 
 
 
-void setupInterrupt();//interrupt functions
+
 ISR (INT0_vect);
 
 
