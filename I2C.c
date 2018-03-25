@@ -1,10 +1,6 @@
 #include "i2C.h"
+#include "delay.h"
 
-void setupI2C()
-{
- TWSR = (1 << TWPS1) && (1 << TWPS0); //set prescalar to zero         //was TWST = 0
- TWBR = ((Clock_frequency/SCL_frequency)-16)/2; // set SCL frequency in TWI bit register
-}
 
 
 byte I2C_SendAdress(byte addr)

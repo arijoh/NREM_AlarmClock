@@ -1,4 +1,5 @@
 #include "RTC.h"
+#include "delay.h"
 
 void GetTime(byte *hours, byte *minutes, byte *seconds)
 // returns hours, minutes, and seconds in BCD format

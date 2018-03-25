@@ -6,11 +6,11 @@
 
 #include <avr/interrupt.h>
 
-extern int alarmM;//notum þessar variables í checkAlarm
-extern int alarmH;
+int alarmM;//notum þessar variables í checkAlarm
+int alarmH;
 
-extern int state;
-extern int sound;
+int state;
+int sound;
 
 
 

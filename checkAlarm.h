@@ -21,8 +21,5 @@ void BCD_HEX(int data, char s[]);
 
 
 
-int stringlen(char s[]);
-void reverse(char s[]);
-void alarm_itoa( int n , char s[]);
 
 #endif /* CHECKALARM_H_ */

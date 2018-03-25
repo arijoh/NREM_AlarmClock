@@ -1,4 +1,5 @@
 #include "buttonstates.h"
+#include "delay.h"
 
 int state = 1;
 int alarmH = 0;
@@ -21,15 +22,7 @@ int dayint = 1;
 
 int oldyear = 3, oldmonth = 3, olddate = 3;
 
-void setupInterrupt() {
-	DDRD &= ~(1 << DDD2);     // Clear the PD2 pin
-	// PD2 (PCINT0 pin) is now an input
-	PORTD |= (1 << PORTD2);    // turn On the Pull-up
-	// PD2 is now an input with pull-up enabled
-	EICRA |= (1 << ISC00);    // set INT0 to trigger on ANY logic change
-	EICRA |= (1 << ISC01);
-	EIMSK |= (1 << INT0);     // Turns on INT0
-}
+
 
 ISR (INT0_vect) {
 	msDelay(50);

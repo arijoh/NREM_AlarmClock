@@ -20,20 +20,12 @@
 typedef uint8_t byte; // I just like byte
 
 
-void int_itoa( int n , char s[]);
-int int_stringlen(char s[]);
-void int_reverse(char s[]);
-
-void setPorts();
-void msDelay(long unsigned int miS ); // put into a routine
-void usDelay(long unsigned int uiS ); //delay function
 void FlashLED();
 void PulseEnableLine ();
 void SendNibble(byte data);
 void SendByte (byte data);
 void LCD_Cmd (byte cmd);
 void LCD_Char (byte ch);
-void LCD_Init();
 void LCD_Clear(); // clear the LCD display
 void LCD_Cursor(byte x, byte y); // put LCD cursor on specified line
 void LCD_String(const char *text); // display string on LCD
