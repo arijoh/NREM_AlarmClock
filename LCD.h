@@ -9,14 +9,12 @@
 #define DAT7 5 // pin for d7
 
 
-#define Clock_frequency 16000000L // run CPU at 16 MHz
 #define LED 5 // Boarduino LED on PB5
 #define ClearBit(x,y) x &= ~_BV(y) // equivalent to cbi(x,y)
 #define SetBit(x,y) x |= _BV(y) // equivalent to sbi(x,y)
 
 
 #include <avr/io.h> // deal with port registers
-
 typedef uint8_t byte; // I just like byte
 
 

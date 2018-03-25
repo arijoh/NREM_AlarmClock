@@ -1,11 +1,5 @@
-//#include "LCD.h"
-//#include "RTC.h"
-//#include "i2C.h"
-//#include "buttonstates.h"
-//#include "checkAlarm.h"
 #include "setup.h"
 #include "stateRunner.h"
-//#include "delay.h"
 #include "accelerometer.h"
 
 
@@ -15,11 +9,9 @@ int main(void)
 	setup();
 	while(1)
 	{
+		//Current state check in which state the clock is, state is changes when red button is pressed
 		currentState();
-		//check accelerometer
+		//Movement checks for movement
 		movement();
 	}
 }
-
-
-

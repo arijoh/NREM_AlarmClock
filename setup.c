@@ -6,20 +6,23 @@
 
 void setup()
 {
-	setPorts(); // set port output for LCD
-	LCD_Init(); // initialize HD44780 LCD controller
-	setupI2C(); // set I2C clock frequency
-	LCD_Clear();
+	setupI2C(); //TWI SDA clock set
+	setupLCD();
+	setupButtons();
+	setupUart();
 	setupInterrupt();
-	InitUart();
 	sei();
+}
+
+void setupButtons()
+{
 	DDRD &= ~(1 << PD2);
 	DDRD &= ~(1 << PD7);
 	DDRD &= ~(1 << PD6);
 	DDRD &= ~(1 << PD5);
 }
 
-void InitUart()  //set baud rate, enable tx,tx communications
+void setupUart()  //set baud rate, enable tx,tx communications
 {
 	UBRR0H=0;
 	UBRR0L=207; //we select UBRR0L=207 for 4800 BAUD.
@@ -38,9 +41,7 @@ void setPorts()
 void setupInterrupt()
 {
 	DDRD &= ~(1 << DDD2);     // Clear the PD2 pin
-	// PD2 (PCINT0 pin) is now an input
 	PORTD |= (1 << PORTD2);    // turn On the Pull-up
-	// PD2 is now an input with pull-up enabled
 	EICRA |= (1 << ISC00);    // set INT0 to trigger on ANY logic change
 	EICRA |= (1 << ISC01);
 	EIMSK |= (1 << INT0);     // Turns on INT0
@@ -48,12 +49,13 @@ void setupInterrupt()
 
 void setupI2C()
 {
- TWSR = (1 << TWPS1) && (1 << TWPS0); //set prescalar to zero         //was TWST = 0
- TWBR = ((Clock_frequency/SCL_frequency)-16)/2; // set SCL frequency in TWI bit register
+ TWSR = 0; //Prescaler set to 1
+ TWBR = ((Clock_frequency/SCL_frequency)-16)/2; //The TW Bit Register set to 72.
 }
 
-void LCD_Init()
+void setupLCD()
 {
+	setPorts(); //set port output for LCD
 	LCD_Cmd(0x33); // Controller initialized
 	LCD_Cmd(0x32); // 4bit input mode
 	LCD_Cmd(0x28); // 2 line, 5x7 matrix
@@ -61,4 +63,6 @@ void LCD_Init()
 	LCD_Cmd(0x06); // cursor direction = right
 	LCD_Cmd(0x01); // start with clear display
 	msDelay(3); // wait for LCD to initialize
+	LCD_Clear();
 }
+

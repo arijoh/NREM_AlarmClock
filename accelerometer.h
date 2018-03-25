@@ -6,7 +6,10 @@
 
 void movement();
 
-int shours, sminutes, sseconds;
+int hours_temp;
+int minutes_temp;
+int seconds_temp;
+
 
 char string[3];
 void UART_Transmit_String (char s[]);

@@ -4,6 +4,7 @@
 #include "delay.h"
 #include "checkAlarm.h"
 
+#include "LCD.h" //taka fra a eftir
 
 
 void movement(){
@@ -17,7 +18,12 @@ void movement(){
 	{
 		sendTime();
 
-		int_itoa(b_data, string) ;
+		msDelay(5);
+
+		int magnitude = a_data-b_data;
+
+
+		int_itoa(magnitude, string) ;
 		UART_Transmit_String(string);
 		msDelay(5);
 		UDR0 = '\r';
@@ -40,24 +46,25 @@ void UART_Transmit_String (char s[])
 
 void sendTime()
 {
+	//taka inn gildi fyrir klukku
+	GetTime(&hours_temp,&minutes_temp,&seconds_temp);
 
-	GetTime(&shours,&sminutes,&sseconds);
+	BCD_HEX(hours_temp, accHour);
+	BCD_HEX(minutes_temp, accMin);
+	BCD_HEX(seconds_temp, accSec);
 
-	BCD_HEX(shours, accHour);
-	BCD_HEX(sminutes, accMin);
-	BCD_HEX(sseconds, accSec);
-
-	msDelay(25);
-
-	int counter=0;
-
-	while (counter>=3)
-	{
-		UDR0 = accHour[counter];
-		counter++;
-	}
-
+	UART_Transmit_String(accHour);
 	msDelay(5);
+	UDR0 = ':';
+	msDelay(5);
+	UART_Transmit_String(accMin);
+	msDelay(5);
+	UDR0 = ':';
+	msDelay(5);
+	UART_Transmit_String(accSec);
+	msDelay(5);
+	UDR0 = 9;
+
 
 
 
