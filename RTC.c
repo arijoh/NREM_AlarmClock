@@ -46,9 +46,6 @@ void setDay(int data)
 }
 
 
-// ---------------------------------------------------------------------------
-// APPLICATION ROUTINES
-
 void LCD_TwoDigits(byte data)
 // helper function for WriteDate()
 // input is two digits in BCD format

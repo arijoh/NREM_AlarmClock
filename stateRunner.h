@@ -3,5 +3,4 @@
 
 void currentState();
 
-
 #endif /* STATERUNNER_H_ */

@@ -1,8 +1,6 @@
 #ifndef ITOA_H_
 #define ITOA_H_
 
-
-
 char st[8]; // save enough space for result
 
 void int_itoa( int n , char s[]);

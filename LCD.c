@@ -3,23 +3,6 @@
 #include "delay.h"
 
 
-
-
-void FlashLED()
-{
-	SetBit(PORTB,LED);
-	msDelay(250);
-	ClearBit(PORTB,LED);
-	msDelay(250);
-}
-// ---------------------------------------------------------------------------
-
-void PulseEnableLine ()
-{
-	SetBit(PORTB,LCD_E); // take LCD enable line high
-	usDelay(1); // wait 40 microseconds //changed to 100/2 microseconds
-	ClearBit(PORTB,LCD_E); // take LCD enable line low
-}
 void SendNibble(byte data)
 {
 	PORTB &= 0xC3; // 1100.0011 = clear 4 data lines
@@ -31,7 +14,9 @@ void SendNibble(byte data)
 		SetBit(PORTB,DAT6);
 	if (data & _BV(7))
 		SetBit(PORTB,DAT7);
-	PulseEnableLine(); // clock 4 bits into controller
+	SetBit(PORTB,LCD_E); //EN set
+	usDelay(1); // wait 40 microseconds
+	ClearBit(PORTB,LCD_E); // EN cleared
 }
 void SendByte (byte data)
 {
@@ -39,7 +24,7 @@ void SendByte (byte data)
 	SendNibble(data<<4); // send lower 4 bits
 	ClearBit(PORTB,5); // turn off boarduino LED
 }
-void LCD_Cmd (byte cmd)
+void LCD_byte (byte cmd)
 {
 	ClearBit(PORTB,LCD_RS); // R/S line 0 = command data
 	SendByte(cmd); // send it
@@ -52,7 +37,7 @@ void LCD_Char (byte ch)
 
 void LCD_Clear() // clear the LCD display
 {
-	LCD_Cmd(0x01);//0x01 hreinsar skjá
+	LCD_byte(0x01);//0x01 hreinsar skjá
 	msDelay(3); // wait for LCD to process command
 }
 void LCD_Cursor(byte x, byte y) // put LCD cursor on specified line
@@ -70,7 +55,7 @@ void LCD_Cursor(byte x, byte y) // put LCD cursor on specified line
 		addr = 0x54;
 		break;
 	}
-	LCD_Cmd(0x80+addr+x); // update cursor with x,y position 0x80 is home curosr (I think)
+	LCD_byte(0x80+addr+x); // update cursor with x,y position 0x80 is home curosr (I think)
 }
 
 void LCD_String(const char *text) // display string on LCD

@@ -11,7 +11,6 @@ int counter;
 int hour;
 int min;
 int sound;
-
 int year = 18;
 int month = 1;
 int date = 1;
@@ -22,11 +21,14 @@ int dayint = 1;
 
 int oldyear = 3, oldmonth = 3, olddate = 3;
 
-
+#define confirmButton (PIND & (1 << PD7))
+#define plusButton (PIND & (1 << PD6))
+#define minusButton (PIND & (1 << PD5))
+#define interruptButton PIND & (1 << PD2)
 
 ISR (INT0_vect) {
 	msDelay(50);
-	if (PIND & (1 << PD2))
+	if (interruptButton)
 	{
 		state++;
 	}
@@ -41,7 +43,7 @@ void setAlarmState()
 	LCD_Cursor(0,1);
 	msDelay(50);
 
-	if ((PIND & (1 << PD7))) {
+	if (confirmButton) {
 		setAlarmH();
 	}
 }
@@ -54,12 +56,12 @@ void setAlarmH() {
 	LCD_String("Set alarm hour:");
 
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			alarmH++;
 			msDelay(100);
 		}
 
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			alarmH--;
 			msDelay(100);
 		}
@@ -77,11 +79,11 @@ void setAlarmH() {
 
 		alarmPrint(alarmH, alarmM);
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				msDelay(50);
-				if ((PIND & (1 << PD7))) {
+				if (confirmButton) {
 					LCD_Cursor(0,0);
 					LCD_String("Hour set!      ");
 					msDelay(1000);
@@ -97,13 +99,13 @@ void setAlarmH() {
 void setAlarmM() {
 
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			alarmM++;
 			msDelay(100);
 		}
 
 		DDRD &= ~(1 << PD5);
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			alarmM--;
 			msDelay(100);
 		}
@@ -121,9 +123,9 @@ void setAlarmM() {
 
 		alarmPrint(alarmH, alarmM);
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				LCD_Cursor(0, 0);
 				LCD_String("Minute set!   ");
 				msDelay(1000);
@@ -173,9 +175,9 @@ void setTimeState()
 	LCD_Cursor(0,1);
 	msDelay(50);
 
-	if ((PIND & (1 << PD7))) {
+	if (confirmButton) {
 		msDelay(50);
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			changeTimeH();
 		}
 	}
@@ -192,13 +194,13 @@ void changeTimeH()
 	while(loopa == 1){
 
 		DDRD &= ~(1 << PD6);
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			hour++;
 			msDelay(100);
 		}
 
 		DDRD &= ~(1 << PD5);
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			hour--;
 			msDelay(100);
 		}
@@ -217,9 +219,9 @@ void changeTimeH()
 		alarmPrint(hour, min);
 
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				LCD_Cursor(0,0);
 				LCD_String("New hour set!     ");
 				msDelay(1000);
@@ -235,13 +237,13 @@ void changeTimeH()
 void changeTimeM()
 {
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			min++;
 			msDelay(100);
 		}
 
 		DDRD &= ~(1 << PD5);
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			min--;
 			msDelay(100);
 		}
@@ -260,9 +262,9 @@ void changeTimeM()
 		alarmPrint(hour, min);
 
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				LCD_Cursor(0, 0);
 				LCD_String("New minute set!   ");
 				msDelay(1000);
@@ -281,9 +283,9 @@ void ConfirmTimechange()
 	alarmPrint(hour,min);
 
 	while (counter < 50){
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(150);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				LCD_Clear();
 				LCD_String("Time changed!");
 				msDelay(3000);
@@ -350,9 +352,9 @@ void setDateState()
 	LCD_Cursor(0,1);
 	msDelay(50);
 
-	if ((PIND & (1 << PD7))) {
+	if (confirmButton) {
 		msDelay(150);
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			//setYear();
 			setDateDate();
 		}
@@ -368,12 +370,12 @@ void setYear()
 	LCD_String("Set year");
 
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			year++;
 			msDelay(100);
 		}
 
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			year--;
 			msDelay(100);
 		}
@@ -391,10 +393,10 @@ void setYear()
 
 		datePrint(year, month, date);
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
 
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				LCD_Cursor(0,0);
 				LCD_String("Year set!      ");
 				RegisterSetter(year,1,2);
@@ -459,12 +461,12 @@ void setMonth()
 	LCD_String("Set Month");
 
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			month++;
 			msDelay(100);
 		}
 
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			month--;
 			msDelay(100);
 		}
@@ -482,11 +484,11 @@ void setMonth()
 
 		datePrint(year, month, date);
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				msDelay(50);
-				if ((PIND & (1 << PD7))) {
+				if (confirmButton) {
 					LCD_Cursor(0,0);
 					LCD_String("Month set!     ");
 					msDelay(1000);
@@ -509,12 +511,12 @@ void setDateDate()
 	loopa = 1;
 
 	while(loopa == 1){
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			date++;
 			msDelay(100);
 		}
 
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			date--;
 			msDelay(100);
 		}
@@ -532,11 +534,11 @@ void setDateDate()
 
 		datePrint(year, month, date);
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(50);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				msDelay(50);
-				if ((PIND & (1 << PD7))) {
+				if (confirmButton) {
 					LCD_Cursor(0,0);
 					LCD_String("Date set!    ");
 					msDelay(1000);
@@ -557,10 +559,10 @@ void setDayState()
 	LCD_Cursor(0,1);
 	msDelay(50);
 
-	if ((PIND & (1 << PD7))) {
+	if (confirmButton) {
 		LCD_Clear();
 		msDelay(150);
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(200);
 			setDayDay();
 		}
@@ -577,13 +579,13 @@ void setDayDay()
 
 	while(loopa == 1){
 
-		if ((PIND & (1 << PD6))) {
+		if (plusButton) {
 			dayint++;
 			msDelay(100);
 			LCD_Cursor(0,1);
 		}
 
-		if ((PIND & (1 << PD5))) {
+		if (minusButton) {
 			dayint--;
 			msDelay(100);
 			LCD_Cursor(0,1);
@@ -629,9 +631,9 @@ void setDayDay()
 
 		newdayint = dayint;
 
-		if ((PIND & (1 << PD7))) {
+		if (confirmButton) {
 			msDelay(150);
-			if ((PIND & (1 << PD7))) {
+			if (confirmButton) {
 				RegisterSetter(dayint, 3, 3);
 				LCD_Cursor(0,0);
 				LCD_String("Weekday set! ");

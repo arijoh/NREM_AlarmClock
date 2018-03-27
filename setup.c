@@ -56,12 +56,12 @@ void setupI2C()
 void setupLCD()
 {
 	setPorts(); //set port output for LCD
-	LCD_Cmd(0x33); // Controller initialized
-	LCD_Cmd(0x32); // 4bit input mode
-	LCD_Cmd(0x28); // 2 line, 5x7 matrix
-	LCD_Cmd(0x0C); // turn cursor off (0x0E to enable)
-	LCD_Cmd(0x06); // cursor direction = right
-	LCD_Cmd(0x01); // start with clear display
+	LCD_byte(0x33); // Controller initialized
+	LCD_byte(0x32); // 4bit input mode
+	LCD_byte(0x28); // 2 line, 5x7 matrix
+	LCD_byte(0x0C); // turn cursor off (0x0E to enable)
+	LCD_byte(0x06); // cursor direction = right
+	LCD_byte(0x01); // start with clear display
 	msDelay(3); // wait for LCD to initialize
 	LCD_Clear();
 }
