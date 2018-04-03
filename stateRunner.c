@@ -22,7 +22,12 @@ void currentState()
 	else if (state == 4){
 		setDateState();
 	}
-	else{
+	else if (state == 5){
 		setDayState();
 	}
+	else if (state == 6)
+	{
+		setAcc();
+	}
+
 }

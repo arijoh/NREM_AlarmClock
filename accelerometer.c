@@ -5,24 +5,24 @@
 #include "checkAlarm.h"
 #include "buttonStates.h"
 
-#include "LCD.h" //ma taka
 
 void movement(){
+	if (AccOn == 1) {
+		int a_data, b_data;
+		a_data = I2C_ReadRegister(0x3A, 0x01);
+		b_data = I2C_ReadRegister(0x3A, 0x01);
 
-	int a_data, b_data;
-	a_data = I2C_ReadRegister(0x3A, 0x01);
-	b_data = I2C_ReadRegister(0x3A, 0x01);
-
-	if (((a_data - b_data) > 2) | ((b_data - a_data) > 2))
-	{
-		sendTime();
-		msDelay(5);
-		int magnitude = a_data-b_data;
-		int_itoa(magnitude, string) ;
-		UART_Transmit_String(string);
-		msDelay(5);
-		UDR0 = '\r';
-		UDR0 = '\n';
+		if (((a_data - b_data) > 2) | ((b_data - a_data) > 2))
+		{
+			sendTime();
+			msDelay(5);
+			int magnitude = a_data-b_data;
+			int_itoa(magnitude, string) ;
+			UART_Transmit_String(string);
+			msDelay(5);
+			UDR0 = '\r';
+			UDR0 = '\n';
+		}
 	}
 	msDelay(5);
 

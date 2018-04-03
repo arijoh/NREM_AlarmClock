@@ -12,7 +12,6 @@ byte I2C_Start(byte address)
 	return (TW_STATUS==0x18); //1 for success, 0 for failure in communications.
 }
 
-
 byte I2C_Write (byte address) // sends a data byte to slave
 {
 	TWDR = address; // load data to be sent
@@ -23,26 +22,17 @@ byte I2C_Write (byte address) // sends a data byte to slave
 
 byte I2C_ReadNACK () // reads a data byte from slave
 {
-	TWCR = TW_NACK; // nack = not reading more data
-	while (!(TWCR & 0x80)); // wait
+	TWCR = (1<<TWINT)|(1<<TWEN); // nack = not reading more data
+	while (!(TWCR & 0x80)); // wait until TWINT is set to logic 1
 	return TWDR;
-	//return (TW_STATUS!=0x28);
 }
-
-void I2C_WriteByte(byte busAddr, byte data)
-{
-	I2C_Start(busAddr); // send bus address
-	I2C_Write(data); // then send the data byte
-	I2C_Stop();
-}
-
 
 void I2C_WriteRegister(byte busAddr, byte deviceRegister, byte data)
 {
 	I2C_Start(busAddr); // send bus address
 	I2C_Write(deviceRegister); // first byte = device register address
 	I2C_Write(data); // second byte = data for device register
-	I2C_Stop();
+	STOP();
 }
 
 
@@ -53,6 +43,6 @@ byte I2C_ReadRegister(byte busAddr, byte deviceRegister)
 	I2C_Write(deviceRegister); // set register pointer
 	I2C_Start(busAddr+1); // restart as a read operation
 	data = I2C_ReadNACK(); // read the register data
-	I2C_Stop(); // stop
+	STOP(); // stop
 	return data;
 }

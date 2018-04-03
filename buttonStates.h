@@ -5,18 +5,26 @@
 #include "RTC.h"
 #include <avr/interrupt.h>
 
-int alarmM;//notum þessar variables í checkAlarm
-int alarmH;
+int oldalarmH;
+int oldalarmM;
+
 int state;
+
 int sound;
+int AccOn;
 
 ISR (INT0_vect);
 
+int alarmM;//notum þessar variables í checkAlarm
+int alarmH;
 
-void setAlarmState();//set alarm
+void setAlarmState();
 void setAlarmH();
 void setAlarmM();
-void alarmPrint();//prints time on lower row on LCD
+void accOn();
+
+int loopa;
+
 void setTimeState();//change time functions
 void changeTime();
 void changeTimeH();
@@ -31,5 +39,6 @@ void datePrint(int data,int month,int date);
 void RegisterSetter(int data, int reg, int hvad);
 void setDayState();
 void setDayDay();
+void setAcc();
 
 #endif /* BUTTONSTATES_H_ */

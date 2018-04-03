@@ -3,6 +3,7 @@
 #include "buttonStates.h"
 #include "delay.h"
 
+
 void checkAlarm()
 {
 	GetTime(&hours,&minutes,&seconds);

@@ -2,10 +2,14 @@
 #include "delay.h"
 
 int state = 1;
-int alarmH = 0;
-int oldalarmH = 3;
-int alarmM = 0;
-int oldalarmM = 3;
+
+
+#define confirmButton (PIND & (1 << PD7))
+#define plusButton (PIND & (1 << PD6))
+#define minusButton (PIND & (1 << PD5))
+#define interruptButton PIND & (1 << PD2)
+
+
 int loopa = 0;
 int counter;
 int hour;
@@ -21,10 +25,7 @@ int dayint = 1;
 
 int oldyear = 3, oldmonth = 3, olddate = 3;
 
-#define confirmButton (PIND & (1 << PD7))
-#define plusButton (PIND & (1 << PD6))
-#define minusButton (PIND & (1 << PD5))
-#define interruptButton PIND & (1 << PD2)
+
 
 ISR (INT0_vect) {
 	msDelay(50);
@@ -32,9 +33,13 @@ ISR (INT0_vect) {
 	{
 		state++;
 	}
-	if (state > 5)
+	if (state > 6)
 		state = 1;
 }
+
+
+int alarmH = 0;
+int alarmM = 0;
 
 void setAlarmState()
 {
@@ -56,7 +61,7 @@ void setAlarmH() {
 	LCD_String("Set alarm hour:");
 
 	while(loopa == 1){
-		if (plusButton) {
+		if ((PIND & (1 << PD6))) {
 			alarmH++;
 			msDelay(100);
 		}
@@ -141,6 +146,10 @@ void setAlarmM() {
 	}
 }
 
+int oldalarmH = 3;
+int oldalarmM = 3;
+
+
 void alarmPrint(int alarmH, int alarmM)
 {
 
@@ -166,7 +175,6 @@ void alarmPrint(int alarmH, int alarmM)
 	}
 	oldalarmH = alarmH;
 }
-
 
 void setTimeState()
 {
@@ -355,7 +363,6 @@ void setDateState()
 	if (confirmButton) {
 		msDelay(150);
 		if (confirmButton) {
-			//setYear();
 			setDateDate();
 		}
 	}
@@ -646,3 +653,30 @@ void setDayDay()
 
 	}
 }
+
+void setAcc()
+{
+	LCD_Clear();
+	LCD_String("Set Accelerometer?");
+	LCD_Cursor(0,1);
+	msDelay(50);
+
+	if (confirmButton) {
+		msDelay(50);
+			accOn();
+	}
+
+
+}
+
+void accOn()
+{
+	loopa = 1;
+	AccOn = 1;
+	LCD_String("Now On!");
+	msDelay(5000);
+	loopa = 0;
+	LCD_Clear();
+	state = 1;
+}
+
