@@ -3,71 +3,71 @@
 #include "delay.h"
 
 
-void SendNibble(byte data)
+void Set4Bit(byte data)
 {
-	PORTB &= 0xC3; // 1100.0011 = clear 4 data lines
-	if (data & _BV(4))
-		SetBit(PORTB,DAT4);
-	if (data & _BV(5))
-		SetBit(PORTB,DAT5);
-	if (data & _BV(6))
-		SetBit(PORTB,DAT6);
-	if (data & _BV(7))
-		SetBit(PORTB,DAT7);
-	SetBit(PORTB,LCD_E); //EN set
-	usDelay(1); // wait 40 microseconds
-	ClearBit(PORTB,LCD_E); // EN cleared
+	PORTB &= 0xC3; //Clear data lines
+
+	if (data & (1<<4))
+		sbi(PORTB,2); //2 is pin for d4
+	if (data & (1<<5))
+		sbi(PORTB,3);//3 is pin for d5
+	if (data & (1<<6))
+		sbi(PORTB,4);//4 is pin for d6
+	if (data & (1<<7))
+		sbi(PORTB,5);//5 is pin for d7
+
+	sbi(PORTB,1); //enable pin set, 1 is EN pin.
+	usDelay(1); //wait
+	cbi(PORTB,1); //enable pin cleared
 }
+
 void SendByte (byte data)
 {
-	SendNibble(data); // send upper 4 bits
-	SendNibble(data<<4); // send lower 4 bits
-	ClearBit(PORTB,5); // turn off boarduino LED
+	Set4Bit(data); //send first 4 bits
+	Set4Bit(data<<4); // send second 4 bits
+	//cbi(PORTB,5); // turn off boarduino LED
 }
-void LCD_byte (byte cmd)
+void LCD_byte (byte command)
 {
-	ClearBit(PORTB,LCD_RS); // R/S line 0 = command data
-	SendByte(cmd); // send it
+	cbi(PORTB,0); //clear RS line to indicate a command
+	SendByte(command); //send the command
 }
 void LCD_Char (byte ch)
 {
-	SetBit(PORTB,LCD_RS); // R/S line 1 = character data
-	SendByte(ch); // send it
+	sbi(PORTB,0); //set RS line to indicate a data
+	SendByte(ch); //send data
 }
 
 void LCD_Clear() // clear the LCD display
 {
-	LCD_byte(0x01);//0x01 hreinsar skjá
-	msDelay(3); // wait for LCD to process command
+	LCD_byte(0x01);//0x01 is the clear screen command
+	msDelay(3); //give some time to clear display
 }
-void LCD_Cursor(byte x, byte y) // put LCD cursor on specified line
+void LCD_line(byte line) // put LCD cursor on specified line
 {
-	byte addr = 0; // line 0 begins at addr 0x00
-	switch (y)
+	byte cursor = 0x80; // line 0 begins at cursor 0x00
+
+	if(line == 1)
+		cursor = 0x40 + cursor; //0x40 is added to 0x80 for the line 1 command
+
+	LCD_byte(cursor); //send command for row
+}
+
+void LCD_String(char text[5])
+{
+	int n = 0;
+	char data;
+	while (text[n]) //print one letter at a time
 	{
-	case 1:
-		addr = 0x40;
-		break; // line 1 begins at addr 0x40
-	case 2:
-		addr = 0x14;
-		break;
-	case 3:
-		addr = 0x54;
-		break;
+		data = text[n];
+		LCD_Char(data);
+		n++;
 	}
-	LCD_byte(0x80+addr+x); // update cursor with x,y position 0x80 is home curosr (I think)
+
 }
 
-void LCD_String(const char *text) // display string on LCD
+void LCD_Integer(int data) // displays the integer value of DATA at current LCD cursor position
 {
-	while (*text) // do until /0 character
-		LCD_Char(*text++); // send char & update char pointer
-}
-
-
-void LCD_Integer(int data)
-// displays the integer value of DATA at current LCD cursor position
-{
-	int_itoa(data, st);
-	LCD_String(st); // display in on LCD
+	int_itoa(data, st); //convert to string st
+	LCD_String(st); //send string (one char by one) to LCD
 }

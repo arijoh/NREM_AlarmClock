@@ -25,7 +25,6 @@ void movement(){
 		}
 	}
 	msDelay(5);
-
 }
 
 void UART_Transmit_String (char s[])

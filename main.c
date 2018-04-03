@@ -2,6 +2,8 @@
 #include "stateRunner.h"
 #include "accelerometer.h"
 
+#include "LCD.h"
+
 
 
 int main(void)

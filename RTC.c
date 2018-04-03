@@ -111,11 +111,11 @@ void WhichDay(int day)
 }
 void LCD_TimeDate()
 {
-	LCD_Cursor(0,0);
+	LCD_line(0);
 	WriteTime();
-	LCD_Cursor(0,1);
+	LCD_line(1);
 	WriteDay();
-	LCD_Cursor(4,1);
+	//LCD_line(4,1);
 	WriteDate();
 }
 
