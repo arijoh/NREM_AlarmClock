@@ -666,8 +666,6 @@ void setAcc()
 		msDelay(50);
 			accOn();
 	}
-
-
 }
 
 void accOn()
@@ -680,4 +678,3 @@ void accOn()
 	LCD_Clear();
 	state = 1;
 }
-
