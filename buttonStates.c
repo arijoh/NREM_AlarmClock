@@ -658,9 +658,11 @@ void setDayDay()
 void setAcc()
 {
 	LCD_Clear();
-	LCD_String("Set Accelerometer?");
+	LCD_String("NonREM On/Off");
 	LCD_line(1);
+	LCD_String("Off!");
 	msDelay(50);
+
 
 	if (confirmButton) {
 		msDelay(50);
@@ -672,7 +674,7 @@ void accOn()
 {
 	loopa = 1;
 	AccOn = 1;
-	LCD_String("Now On!");
+	LCD_String("On! ");
 	msDelay(5000);
 	loopa = 0;
 	LCD_Clear();

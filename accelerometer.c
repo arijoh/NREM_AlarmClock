@@ -94,7 +94,7 @@ void compare(char triggerHour[], char triggerMin[])
 	}
 
 
-	if (delta < 90)
+	if (delta < 30)
 	{
 		alarm();
 		UART_Transmit_String("Woke");
