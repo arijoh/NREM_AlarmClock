@@ -14,10 +14,10 @@ typedef uint8_t byte; // I just like byte
 #define TW_STATUS (TWSR & 0xF8) //SKOÐA
 #define STOP() TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO) // inline macro for stop condition
 
-byte I2C_Write (byte data); // sends a data byte to slave
-byte I2C_ReadNACK (); // reads a data byte from slave
-void I2C_WriteRegister(byte busAddr, byte deviceRegister, byte data);
-byte I2C_ReadRegister(byte busAddr, byte deviceRegister);
-byte I2C_Start(byte address);
+byte writeAddress (byte data); // sends a data byte to slave
+byte readNack (); // reads a data byte from slave
+void writeRegister(byte busAddr, byte deviceRegister, byte data);
+byte readRegister(byte busAddr, byte deviceRegister);
+byte startI2C(byte address);
 
 #endif /* I2C_H_ */

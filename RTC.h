@@ -3,20 +3,20 @@
 
 #include "LCD.h"
 
-#define DS1307 0xD0
+#define RTC 0xD0
 
-void GetTime(byte *hours, byte *minutes, byte *seconds);
-void GetDate(byte *months, byte *days, byte *years);
-void setTime(int data, int reg);
-void setDate(int data, int reg);
-void setDay(int data);
+void readTime(byte *hours, byte *minutes, byte *seconds);
+void readDate(byte *months, byte *days, byte *years);
+void writeTime(int data, int reg);
+void writeDays(int data, int reg);
+void writeWeekday(int data);
 void LCD_TwoDigits(byte data);
-void WriteDate();
-void WriteTime();
+void dispDays();
+void dispTime();
 void LCD_TimeDate();
 void MainLoop();
-void GetDay(byte *day);
-void WriteDay();
+void readDay(byte *day);
+void dispDay();
 void WhichDay(int day);
 
 #endif /* RTC_H_ */

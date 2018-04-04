@@ -1,85 +1,81 @@
 #include "RTC.h"
 #include "delay.h"
+#include "I2C.h"
 
-void GetTime(byte *hours, byte *minutes, byte *seconds)
-// returns hours, minutes, and seconds in BCD format
+void readTime(byte *hours, byte *minutes, byte *seconds) //pointers are made with data and when called the function their address is returned (&)
 {
-	*hours = I2C_ReadRegister(DS1307,0x02);
-	*minutes = I2C_ReadRegister(DS1307,0x01);
-	*seconds = I2C_ReadRegister(DS1307,0x00);
+	*hours = readRegister(RTC,0x02);
+	*minutes = readRegister(RTC,0x01);
+	*seconds = readRegister(RTC,0x00);
 }
-void GetDate(byte *months, byte *days, byte *years)
-// returns months, days, and years in BCD format
+void readDate(byte *months, byte *days, byte *years) //pointers are made with data and when called the function their address is returned (&)
 {
-	*months = I2C_ReadRegister(DS1307,0x05);
-	*days = I2C_ReadRegister(DS1307,0x04);
-	*years = I2C_ReadRegister(DS1307,0x06);
+	*months = readRegister(RTC,0x05);
+	*days = readRegister(RTC,0x04);
+	*years = readRegister(RTC,0x06);
 }
-void GetDay(byte *day)
-// returns months, days, and years in BCD format
+void readDay(byte *day) //pointers are made with data and when called the function their address is returned (&)
 {
-	*day = I2C_ReadRegister(DS1307,0x03);
+	*day = readRegister(RTC,0x03);
 }
-void setTime(int data, int reg)
-// simple, hard-coded way to set the date.
+void writeTime(int data, int reg) //reg=1 is hours, reg=2 is minutes, reg=3 is seconds and will always be set to 0
 {
 	if (reg == 1)
-		I2C_WriteRegister(DS1307,0x02, data); // add 0x40 for PM
+		writeRegister(RTC,0x02, data);
 	else if (reg == 2)
-		I2C_WriteRegister(DS1307,0x01, data);
+		writeRegister(RTC,0x01, data);
 	else if (reg == 3)
-		I2C_WriteRegister(DS1307,0x00, data);
+		writeRegister(RTC,0x00, data);
 }
-void setDate(int data, int reg)
+void writeDays(int data, int reg)//reg=1 is year, reg=2 is month, reg=3 is date
 {
 	if (reg == 1)
-		I2C_WriteRegister(DS1307,0x06, data);
+		writeRegister(RTC,0x06, data);
 	else if (reg == 2)
-		I2C_WriteRegister(DS1307,0x05, data);
+		writeRegister(RTC,0x05, data);
 	else if (reg == 3)
-		I2C_WriteRegister(DS1307,0x04, data);
+		writeRegister(RTC,0x04, data);
 }
 
-void setDay(int data)
+void writeWeekday(int data) //weekday set
 {
-	I2C_WriteRegister(DS1307,0x03, data);
+	writeRegister(RTC,0x03, data);
 }
 
-
-void LCD_TwoDigits(byte data)
-// helper function for WriteDate()
-// input is two digits in BCD format
-// output is to LCD display at current cursor position
+void LCD_BCD(byte data) //prints out datain BCD format
 {
 	byte temp = data>>4;
 	LCD_Char(temp+'0');
 	data &= 0x0F;
 	LCD_Char(data+'0');
 }
-void WriteDate()
+
+void dispDays()
 {
 	byte months, days, years;
-	GetDate(&months,&days,&years);
-	LCD_TwoDigits(days);
+	readDate(&months,&days,&years);
+	LCD_BCD(days);
 	LCD_Char('/');
-	LCD_TwoDigits(months);
+	LCD_BCD(months);
 	LCD_Char('/');
-	LCD_TwoDigits(years);
+	LCD_BCD(years);
 }
-void WriteTime()
+
+void dispTime()
 {
 	byte hours, minutes, seconds;
-	GetTime(&hours,&minutes,&seconds);
-	LCD_TwoDigits(hours);
+	readTime(&hours,&minutes,&seconds);
+	LCD_BCD(hours);
 	LCD_Char(':');
-	LCD_TwoDigits(minutes);
+	LCD_BCD(minutes);
 	LCD_Char(':');
-	LCD_TwoDigits(seconds);
+	LCD_BCD(seconds);
 }
-void WriteDay()
+
+void dispDay()
 {
 	byte day;
-	GetDay(&day);
+	readDay(&day);
 	WhichDay(day);
 }
 void WhichDay(int day)
@@ -112,10 +108,10 @@ void WhichDay(int day)
 void LCD_TimeDate()
 {
 	LCD_line(0);
-	WriteTime();
+	dispTime();
 	LCD_line(1);
-	WriteDay();
+	dispDay();
 	//LCD_line(4,1);
-	WriteDate();
+	dispDays();
 }
 

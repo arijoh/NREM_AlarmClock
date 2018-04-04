@@ -1,7 +1,7 @@
 #include "i2C.h"
 #include "delay.h"
 
-byte I2C_Start(byte address)
+byte startI2C(byte address)
 // look for device at specified address; return 1=found, 0=not found
 {
 	TWCR = START; // send start condition (page 228 data sheet)
@@ -12,7 +12,7 @@ byte I2C_Start(byte address)
 	return (TW_STATUS==0x18); //1 for success, 0 for failure in communications.
 }
 
-byte I2C_Write (byte address) // sends a data byte to slave
+byte writeAddress (byte address) // sends a data byte to slave
 {
 	TWDR = address; //address put to data register and..
 	TWCR  = SEND; //..sent by putting send condition in control register
@@ -20,28 +20,28 @@ byte I2C_Write (byte address) // sends a data byte to slave
 	return (TW_STATUS!=0x28);
 }
 
-byte I2C_ReadNACK () //data from sensors
+byte readNack () //data from sensors
 {
 	TWCR = (1<<TWINT)|(1<<TWEN); //control register set to NACK mode
 	while (!(TWCR & 0x80)); //wait for reply
 	return TWDR;
 }
 
-void I2C_WriteRegister(byte busAddr, byte deviceRegister, byte data)
+void writeRegister(byte busAddr, byte deviceRegister, byte data)
 {
-	I2C_Start(busAddr);
-	I2C_Write(deviceRegister); // first byte = device register address
-	I2C_Write(data); // second byte = data for device register
+	startI2C(busAddr);
+	writeAddress(deviceRegister); // first byte = device register address
+	writeAddress(data); // second byte = data for device register
 	STOP();
 }
 
-byte I2C_ReadRegister(byte busAddr, byte deviceRegister)
+byte readRegister(byte busAddr, byte deviceRegister)
 {
 	byte data = 0;
-	I2C_Start(busAddr); // send device address
-	I2C_Write(deviceRegister); // set register pointer
-	I2C_Start(busAddr+1); // restart as a read operation
-	data = I2C_ReadNACK(); // read the register data
+	startI2C(busAddr); // send device address
+	writeAddress(deviceRegister); // set register pointer
+	startI2C(busAddr+1); // restart as a read operation
+	data = readNack(); // read the register data
 	STOP(); // stop
 	return data;
 }

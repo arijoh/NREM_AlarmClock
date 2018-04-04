@@ -321,9 +321,9 @@ void ConfirmTimechange()
 
 void resetTime()
 {
-	RegisterSetter(hour, 1, 1);
-	RegisterSetter(min, 2, 1);
-	RegisterSetter(0, 3, 1);
+	RegisterSetter(hour, 1, 1); //set hours
+	RegisterSetter(min, 2, 1); //set minutes
+	RegisterSetter(0, 3, 1); //set seconds always as 0
 }
 
 void RegisterSetter(int data, int reg, int hvad)
@@ -346,11 +346,11 @@ void RegisterSetter(int data, int reg, int hvad)
 		newdata = data + 36;
 
 	if (hvad == 1)
-		setTime(newdata, reg);
+		writeTime(newdata, reg);
 	else if (hvad == 2)
-		setDate(newdata, reg);
+		writeDays(newdata, reg);
 	else if (hvad == 3)
-		setDay(newdata);
+		writeWeekday(newdata);
 }
 
 
@@ -674,7 +674,11 @@ void accOn()
 {
 	loopa = 1;
 	AccOn = 1;
-	LCD_String("On! ");
+	LCD_Clear();
+	LCD_line(0);
+	LCD_String("NonREM On/Off");
+	LCD_line(1);
+	LCD_String("On!");
 	msDelay(5000);
 	loopa = 0;
 	LCD_Clear();

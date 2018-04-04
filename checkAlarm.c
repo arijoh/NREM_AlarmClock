@@ -6,7 +6,7 @@
 
 void checkAlarm()
 {
-	GetTime(&hours,&minutes,&seconds);
+	readTime(&hours,&minutes,&seconds);
 
 	BCD_HEX(hours, currentHour);
 	BCD_HEX(minutes, currentMin);

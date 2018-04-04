@@ -9,8 +9,8 @@
 void movement(){
 	if (AccOn == 1) {
 		int a_data, b_data;
-		a_data = I2C_ReadRegister(0x3A, 0x01);
-		b_data = I2C_ReadRegister(0x3A, 0x01);
+		a_data = readRegister(0x3A, 0x01);
+		b_data = readRegister(0x3A, 0x01);
 
 		if (((a_data - b_data) > 2) | ((b_data - a_data) > 2))
 		{
@@ -40,7 +40,7 @@ void UART_Transmit_String (char s[])
 void sendTime()
 {
 	//taka inn gildi fyrir klukku
-	GetTime(&hours_temp,&minutes_temp,&seconds_temp);
+	readTime(&hours_temp,&minutes_temp,&seconds_temp);
 
 	BCD_HEX(hours_temp, accHour);
 	BCD_HEX(minutes_temp, accMin);
