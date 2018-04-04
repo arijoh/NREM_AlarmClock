@@ -12,6 +12,9 @@ char accHour[3];
 char accMin[3];
 char accSec[3];
 
+int counter;
+int oldhour;
+
 
 void UART_Transmit_String (char s[]);
 void sendTime();

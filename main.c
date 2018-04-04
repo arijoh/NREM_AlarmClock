@@ -3,8 +3,6 @@
 #include "accelerometer.h"
 
 
-
-
 int main(void)
 {
 	setup();

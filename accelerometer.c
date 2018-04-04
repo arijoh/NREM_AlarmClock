@@ -5,6 +5,8 @@
 #include "checkAlarm.h"
 #include "buttonStates.h"
 
+int counter = 0;
+int oldhour = 0;
 
 void movement(){
 	if (AccOn == 1) {
@@ -12,7 +14,7 @@ void movement(){
 		a_data = readRegister(0x3A, 0x01);
 		b_data = readRegister(0x3A, 0x01);
 
-		if (((a_data - b_data) > 2) | ((b_data - a_data) > 2))
+		if (((a_data - b_data) > 2) | ((b_data - a_data) > 2)) //if magnitude of movement is more than abs 2
 		{
 			sendTime();
 			msDelay(5);
@@ -65,7 +67,6 @@ void sendTime()
 //takes in hour of trigge rand compares to wake up time
 void compare(char triggerHour[], char triggerMin[])
 {
-
 	int i_triggerHour = toString(triggerHour);
 	int i_triggerMin = toString(triggerMin);
 
@@ -93,18 +94,25 @@ void compare(char triggerHour[], char triggerMin[])
 		}
 	}
 
+	if (oldhour == i_triggerHour)
+	{
+		counter++;
+	}
+	else
+		counter = 0;
 
-	if (delta < 30)
+	oldhour = i_triggerHour;
+
+	if ((delta < 30) & (counter >= 3)) //if 30 min or less until alarm and 3 or more movements in the same hour -> alarm
 	{
 		alarm();
-		UART_Transmit_String("Woke");
+		UART_Transmit_String("W");
 		msDelay(5);
 	}
 	else
 	{
 
 	}
-
 }
 
 int toString(char a[]) {
