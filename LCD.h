@@ -9,11 +9,11 @@ typedef uint8_t byte; // I just like byte
 
 void Set4Bit(byte data);
 void SendByte (byte data);
-void LCD_byte (byte cmd);
-void LCD_Char (byte ch);
-void LCD_Clear();
-void LCD_line(byte line);
-void LCD_String(char text[5]);
-void LCD_Integer(int data);
+void printByte (byte command);
+void printChar (byte ch);
+void clearLCD();
+void LCDline(byte line);
+void printString(char text[5]);
+void printInt(int data);
 
 #endif /* LCD_H_ */

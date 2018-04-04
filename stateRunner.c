@@ -6,7 +6,7 @@
 void currentState()
 {
 	if(state == 1) {
-		LCD_Clear();
+		clearLCD();
 		LCD_TimeDate(); // put time & date on LCD
 		checkAlarm();
 	}

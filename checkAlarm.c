@@ -37,8 +37,8 @@ void alarm()
 	DDRC = 0xff;           // Configure PORTC as output
 
 	while(sound == 1){
-		LCD_Clear();
-		LCD_String("Wake up!");
+		clearLCD();
+		printString("Wake up!");
 		PORTC = 0xff;        // Turn ON the Buzzer conneted to PORTC
 		msDelay(250);      // Wait for some time
 		if (PIND & (1 << PD7))

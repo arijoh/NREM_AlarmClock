@@ -27,47 +27,46 @@ void SendByte (byte data)
 	Set4Bit(data<<4); // send second 4 bits
 	//cbi(PORTB,5); // turn off boarduino LED
 }
-void LCD_byte (byte command)
+void printByte (byte command)
 {
 	cbi(PORTB,0); //clear RS line to indicate a command
 	SendByte(command); //send the command
 }
-void LCD_Char (byte ch)
+void printChar (byte ch)
 {
 	sbi(PORTB,0); //set RS line to indicate a data
 	SendByte(ch); //send data
 }
 
-void LCD_Clear() // clear the LCD display
+void clearLCD() // clear the LCD display
 {
-	LCD_byte(0x01);//0x01 is the clear screen command
+	printByte(0x01);//0x01 is the clear screen command
 	msDelay(3); //give some time to clear display
 }
-void LCD_line(byte line) // put LCD cursor on specified line
+void LCDline(byte line) // put LCD cursor on specified line
 {
 	byte cursor = 0x80; // line 0 begins at cursor 0x00
 
 	if(line == 1)
 		cursor = 0x40 + cursor; //0x40 is added to 0x80 for the line 1 command
 
-	LCD_byte(cursor); //send command for row
+	printByte(cursor); //send command for row
 }
 
-void LCD_String(char text[5])
+void printString(char text[5])
 {
 	int n = 0;
 	char data;
 	while (text[n]) //print one letter at a time
 	{
 		data = text[n];
-		LCD_Char(data);
+		printChar(data);
 		n++;
 	}
-
 }
 
-void LCD_Integer(int data) // displays the integer value of DATA at current LCD cursor position
+void printInt(int data) // displays the integer value of DATA at current LCD cursor position
 {
 	int_itoa(data, st); //convert to string st
-	LCD_String(st); //send string (one char by one) to LCD
+	printString(st); //send string (one char by one) to LCD
 }

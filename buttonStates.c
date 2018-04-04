@@ -43,9 +43,9 @@ int alarmM = 0;
 
 void setAlarmState()
 {
-	LCD_Clear();
-	LCD_String("Set alarm?");
-	LCD_line(1);
+	clearLCD();
+	printString("Set alarm?");
+	LCDline(1);
 	msDelay(50);
 
 	if (confirmButton) {
@@ -57,8 +57,8 @@ void setAlarmH() {
 
 	loopa = 1;
 
-	LCD_Clear();
-	LCD_String("Set alarm hour:");
+	clearLCD();
+	printString("Set alarm hour:");
 
 	while(loopa == 1){
 		if ((PIND & (1 << PD6))) {
@@ -89,11 +89,11 @@ void setAlarmH() {
 			if (confirmButton) {
 				msDelay(50);
 				if (confirmButton) {
-					LCD_line(0);
-					LCD_String("Hour set!      ");
+					LCDline(0);
+					printString("Hour set!      ");
 					msDelay(1000);
-					LCD_Clear();
-					LCD_String("Set alarm min:");
+					clearLCD();
+					printString("Set alarm min:");
 					setAlarmM();
 				}
 			}
@@ -132,14 +132,14 @@ void setAlarmM() {
 		if (confirmButton) {
 			msDelay(50);
 			if (confirmButton) {
-				LCD_line(0);
-				LCD_String("Minute set!   ");
+				LCDline(0);
+				printString("Minute set!   ");
 				msDelay(1000);
-				LCD_line(0);
-				LCD_String("Alarm set!  ");
+				LCDline(0);
+				printString("Alarm set!  ");
 				sound = 1;
 				msDelay(3000);
-				LCD_Clear();
+				clearLCD();
 				loopa = 0;
 				state = 1;
 			}
@@ -156,22 +156,22 @@ void alarmPrint(int alarmH, int alarmM)
 
 	if (alarmM != oldalarmM) {
 		msDelay(50);
-		LCD_line(1);
+		LCDline(1);
 
 		if (alarmH < 10) {
-			LCD_Integer(0);
-			LCD_Integer(alarmH);
+			printInt(0);
+			printInt(alarmH);
 		} else if (alarmH >= 10) {
-			LCD_Integer(alarmH);
+			printInt(alarmH);
 		}
 
-		LCD_String(":");
+		printString(":");
 
 		if (alarmM < 10) {
-			LCD_Integer(0);
-			LCD_Integer(alarmM);
+			printInt(0);
+			printInt(alarmM);
 		} else if (alarmM >= 10) {
-			LCD_Integer(alarmM);
+			printInt(alarmM);
 		}
 	}
 	oldalarmH = alarmH;
@@ -179,9 +179,9 @@ void alarmPrint(int alarmH, int alarmM)
 
 void setTimeState()
 {
-	LCD_Clear();
-	LCD_String("Change time?");
-	LCD_line(1);
+	clearLCD();
+	printString("Change time?");
+	LCDline(1);
 	msDelay(50);
 
 	if (confirmButton) {
@@ -197,8 +197,8 @@ void changeTimeH()
 	//get time variables
 	loopa = 1;
 
-	LCD_Clear();
-	LCD_String("Set new hour:");
+	clearLCD();
+	printString("Set new hour:");
 
 	while(loopa == 1){
 
@@ -231,11 +231,11 @@ void changeTimeH()
 		if (confirmButton) {
 			msDelay(50);
 			if (confirmButton) {
-				LCD_line(0);
-				LCD_String("New hour set!     ");
+				LCDline(0);
+				printString("New hour set!     ");
 				msDelay(1000);
-				LCD_Clear();
-				LCD_String("Set new min:");
+				clearLCD();
+				printString("Set new min:");
 				changeTimeM();
 			}
 		}
@@ -274,8 +274,8 @@ void changeTimeM()
 		if (confirmButton) {
 			msDelay(50);
 			if (confirmButton) {
-				LCD_line(0);
-				LCD_String("New minute set!   ");
+				LCDline(0);
+				printString("New minute set!   ");
 				msDelay(1000);
 				ConfirmTimechange();
 				loopa = 0;
@@ -286,17 +286,17 @@ void changeTimeM()
 void ConfirmTimechange()
 {
 	int counter = 0;
-	LCD_Clear();
-	LCD_String("Confirm change?");
-	LCD_line(1);
+	clearLCD();
+	printString("Confirm change?");
+	LCDline(1);
 	alarmPrint(hour,min);
 
 	while (counter < 50){
 		if (confirmButton) {
 			msDelay(150);
 			if (confirmButton) {
-				LCD_Clear();
-				LCD_String("Time changed!");
+				clearLCD();
+				printString("Time changed!");
 				msDelay(3000);
 				state = 1;
 				//change time
@@ -312,8 +312,8 @@ void ConfirmTimechange()
 	}
 
 	if (counter >= 50){
-		LCD_Clear();
-		LCD_String("Time not changed!");
+		clearLCD();
+		printString("Time not changed!");
 		msDelay(3000);
 		state = 1;
 	}
@@ -356,9 +356,9 @@ void RegisterSetter(int data, int reg, int hvad)
 
 void setDateState()
 {
-	LCD_Clear();
-	LCD_String("Set date?");
-	LCD_line(1);
+	clearLCD();
+	printString("Set date?");
+	LCDline(1);
 	msDelay(50);
 
 	if (confirmButton) {
@@ -374,8 +374,8 @@ void setYear()
 
 
 
-	LCD_Clear();
-	LCD_String("Set year");
+	clearLCD();
+	printString("Set year");
 
 	while(loopa == 1){
 		if (plusButton) {
@@ -405,13 +405,13 @@ void setYear()
 			msDelay(50);
 
 			if (confirmButton) {
-				LCD_line(0);
-				LCD_String("Year set!      ");
+				LCDline(0);
+				printString("Year set!      ");
 				RegisterSetter(year,1,2);
 				RegisterSetter(month,2,2);
 				RegisterSetter(date,3,2);
 				msDelay(3000);
-				LCD_Clear();
+				clearLCD();
 				loopa = 0;
 				state = 1;
 			}
@@ -426,35 +426,35 @@ void datePrint(int year,int month,int date)
 	if ((year != oldyear) || (month != oldmonth) || (date != olddate))
 	{
 		msDelay(50);
-		LCD_line(1);
+		LCDline(1);
 
 
 		if (date < 10) {
-			LCD_Integer(0);
-			LCD_Integer(date);
+			printInt(0);
+			printInt(date);
 		}
 		else if (date >= 10) {
-			LCD_Integer(date);
+			printInt(date);
 		}
 
-		LCD_String(".");
+		printString(".");
 
 		if (month < 10) {
-			LCD_Integer(0);
-			LCD_Integer(month);
+			printInt(0);
+			printInt(month);
 		}
 		else if (month >= 10) {
-			LCD_Integer(month);
+			printInt(month);
 		}
 
-		LCD_String(".");
+		printString(".");
 
 		if (year < 10) {
-			LCD_Integer(0);
-			LCD_Integer(year);
+			printInt(0);
+			printInt(year);
 		}
 		else if (year >= 10) {
-			LCD_Integer(year);
+			printInt(year);
 		}
 	}
 
@@ -465,8 +465,8 @@ void datePrint(int year,int month,int date)
 
 void setMonth()
 {
-	LCD_Clear();
-	LCD_String("Set Month");
+	clearLCD();
+	printString("Set Month");
 
 	while(loopa == 1){
 		if (plusButton) {
@@ -497,11 +497,11 @@ void setMonth()
 			if (confirmButton) {
 				msDelay(50);
 				if (confirmButton) {
-					LCD_line(0);
-					LCD_String("Month set!     ");
+					LCDline(0);
+					printString("Month set!     ");
 					msDelay(1000);
-					LCD_Clear();
-					LCD_String("Set Date:");
+					clearLCD();
+					printString("Set Date:");
 					setYear();
 				}
 			}
@@ -513,8 +513,8 @@ void setMonth()
 void setDateDate()
 {
 
-	LCD_Clear();
-	LCD_String("Set Date");
+	clearLCD();
+	printString("Set Date");
 
 	loopa = 1;
 
@@ -547,11 +547,11 @@ void setDateDate()
 			if (confirmButton) {
 				msDelay(50);
 				if (confirmButton) {
-					LCD_line(0);
-					LCD_String("Date set!    ");
+					LCDline(0);
+					printString("Date set!    ");
 					msDelay(1000);
-					LCD_Clear();
-					LCD_String("Set Month:");
+					clearLCD();
+					printString("Set Month:");
 					setMonth();
 
 				}
@@ -562,13 +562,13 @@ void setDateDate()
 
 void setDayState()
 {
-	LCD_Clear();
-	LCD_String("Set weekday?");
-	LCD_line(1);
+	clearLCD();
+	printString("Set weekday?");
+	LCDline(1);
 	msDelay(50);
 
 	if (confirmButton) {
-		LCD_Clear();
+		clearLCD();
 		msDelay(150);
 		if (confirmButton) {
 			msDelay(200);
@@ -581,8 +581,8 @@ void setDayDay()
 {
 
 
-	LCD_String("Set day");
-	LCD_line(1);
+	printString("Set day");
+	LCDline(1);
 	loopa = 1;
 
 	while(loopa == 1){
@@ -590,44 +590,44 @@ void setDayDay()
 		if (plusButton) {
 			dayint++;
 			msDelay(100);
-			LCD_line(1);
+			LCDline(1);
 		}
 
 		if (minusButton) {
 			dayint--;
 			msDelay(100);
-			LCD_line(1);
+			LCDline(1);
 		}
 
 		if (newdayint != dayint){
 			switch (dayint)
 			{
 			case 1: //Monday
-				LCD_String("MON");
+				printString("MON");
 				msDelay(100);
 				break;
 			case 2: //Tuesday
-				LCD_String("TUE");
+				printString("TUE");
 				msDelay(100);
 				break;
 			case 3: //Wednesday
-				LCD_String("WED");
+				printString("WED");
 				msDelay(100);
 				break;
 			case 4: //Thursday
-				LCD_String("THU");
+				printString("THU");
 				msDelay(100);
 				break;
 			case 5: //Friday
-				LCD_String("FRI");
+				printString("FRI");
 				msDelay(100);
 				break;
 			case 6: //Saturday
-				LCD_String("SAT");
+				printString("SAT");
 				msDelay(100);
 				break;
 			case 7: //Sunday
-				LCD_String("SUN");
+				printString("SUN");
 				msDelay(100);
 				break;
 			case 8:
@@ -643,12 +643,12 @@ void setDayDay()
 			msDelay(150);
 			if (confirmButton) {
 				RegisterSetter(dayint, 3, 3);
-				LCD_line(0);
-				LCD_String("Weekday set! ");
+				LCDline(0);
+				printString("Weekday set! ");
 				msDelay(3000);
 				state = 1;
 				loopa = 0;
-				LCD_Clear();
+				clearLCD();
 			}
 		}
 
@@ -657,10 +657,10 @@ void setDayDay()
 
 void setAcc()
 {
-	LCD_Clear();
-	LCD_String("NonREM On/Off");
-	LCD_line(1);
-	LCD_String("Off!");
+	clearLCD();
+	printString("NonREM On/Off");
+	LCDline(1);
+	printString("Off!");
 	msDelay(50);
 
 
@@ -674,13 +674,13 @@ void accOn()
 {
 	loopa = 1;
 	AccOn = 1;
-	LCD_Clear();
-	LCD_line(0);
-	LCD_String("NonREM On/Off");
-	LCD_line(1);
-	LCD_String("On!");
+	clearLCD();
+	LCDline(0);
+	printString("NonREM On/Off");
+	LCDline(1);
+	printString("On!");
 	msDelay(5000);
 	loopa = 0;
-	LCD_Clear();
+	clearLCD();
 	state = 1;
 }

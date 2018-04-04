@@ -45,9 +45,9 @@ void writeWeekday(int data) //weekday set
 void LCD_BCD(byte data) //prints out datain BCD format
 {
 	byte temp = data>>4;
-	LCD_Char(temp+'0');
+	printChar(temp+'0');
 	data &= 0x0F;
-	LCD_Char(data+'0');
+	printChar(data+'0');
 }
 
 void dispDays()
@@ -55,9 +55,9 @@ void dispDays()
 	byte months, days, years;
 	readDate(&months,&days,&years);
 	LCD_BCD(days);
-	LCD_Char('/');
+	printChar('/');
 	LCD_BCD(months);
-	LCD_Char('/');
+	printChar('/');
 	LCD_BCD(years);
 }
 
@@ -66,9 +66,9 @@ void dispTime()
 	byte hours, minutes, seconds;
 	readTime(&hours,&minutes,&seconds);
 	LCD_BCD(hours);
-	LCD_Char(':');
+	printChar(':');
 	LCD_BCD(minutes);
-	LCD_Char(':');
+	printChar(':');
 	LCD_BCD(seconds);
 }
 
@@ -83,33 +83,33 @@ void WhichDay(int day)
 	switch(day)
 	{
 	case 1:
-		LCD_String("MON-");
+		printString("MON-");
 		break;
 	case 2:
-		LCD_String("TUE-");
+		printString("TUE-");
 		break;
 	case 3:
-		LCD_String("WED-");
+		printString("WED-");
 		break;
 	case 4:
-		LCD_String("THU-");
+		printString("THU-");
 		break;
 	case 5:
-		LCD_String("FRI-");
+		printString("FRI-");
 		break;
 	case 6:
-		LCD_String("SAT-");
+		printString("SAT-");
 		break;
 	case 7:
-		LCD_String("SUN-");
+		printString("SUN-");
 		break;
 	}
 }
 void LCD_TimeDate()
 {
-	LCD_line(0);
+	LCDline(0);
 	dispTime();
-	LCD_line(1);
+	LCDline(1);
 	dispDay();
 	//LCD_line(4,1);
 	dispDays();
