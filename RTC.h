@@ -1,7 +1,9 @@
 #ifndef RTC_H_
 #define RTC_H_
 
-#include "LCD.h"
+#include <avr/io.h> // deal with port registers
+typedef uint8_t byte; // I just like byte
+
 
 #define RTC 0xD0
 
