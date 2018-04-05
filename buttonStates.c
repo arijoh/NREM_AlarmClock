@@ -1,15 +1,13 @@
 #include "buttonstates.h"
 #include "delay.h"
 
-int state = 1;
-
-
 #define confirmButton (PIND & (1 << PD7))
 #define plusButton (PIND & (1 << PD6))
 #define minusButton (PIND & (1 << PD5))
 #define interruptButton PIND & (1 << PD2)
 
-
+//all valibles used in buttonStates.c
+int state = 1;
 int loopa = 0;
 int counter;
 int hour;
@@ -18,14 +16,9 @@ int sound;
 int year = 18;
 int month = 1;
 int date = 1;
-
-
 int newdayint;
 int dayint = 1;
-
 int oldyear = 3, oldmonth = 3, olddate = 3;
-
-
 
 ISR (INT0_vect) {
 	msDelay(50);

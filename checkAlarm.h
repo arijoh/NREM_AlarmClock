@@ -11,10 +11,8 @@ char currentMin[3];
 char alarmMString[3];
 char alarmHString[3];
 
-
 void checkAlarm();
 void alarm();
 void BCD_HEX(int data, char s[]);
-
 
 #endif /* CHECKALARM_H_ */

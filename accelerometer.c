@@ -5,24 +5,28 @@
 #include "checkAlarm.h"
 #include "buttonStates.h"
 
+//Uart is being used to track motion detection and alarm to see how precise the alarm clock is.
+//uart will not be part of the alarm clock once it is developed
+
 int counter = 0;
 int oldhour = 0;
 
 void movement(){
 	if (AccOn == 1) {
 		int a_data, b_data;
-		a_data = readRegister(0x3A, 0x01);
-		b_data = readRegister(0x3A, 0x01);
+		a_data = readRegister(0x3A, 0x01); //read registers of accelerometer
+		b_data = readRegister(0x3A, 0x01); //read again
+		//a_data and b_data are then compared to see if any motion has been detected
 
 		if (((a_data - b_data) > 2) | ((b_data - a_data) > 2)) //if magnitude of movement is more than abs 2
 		{
-			sendTime();
+			sendTime(); //sent time through uart
 			msDelay(5);
 			int magnitude = a_data-b_data;
 			int_itoa(magnitude, string) ;
-			UART_Transmit_String(string);
+			UART_Transmit_String(string); //sent magnitude throuth uart
 			msDelay(5);
-			UDR0 = '\r';
+			UDR0 = '\r'; //start new line
 			UDR0 = '\n';
 		}
 	}
@@ -52,7 +56,7 @@ void sendTime()
 
 	UART_Transmit_String(accHour);
 	msDelay(5);
-	UDR0 = 0x09;
+	UDR0 = 0x09; //for tab between data
 	msDelay(5);
 	UART_Transmit_String(accMin);
 	msDelay(5);
@@ -106,7 +110,7 @@ void compare(char triggerHour[], char triggerMin[])
 	if ((delta < 30) & (counter >= 3)) //if 30 min or less until alarm and 3 or more movements in the same hour -> alarm
 	{
 		alarm();
-		UART_Transmit_String("W");
+		UART_Transmit_String("W"); //sends W with uart to mark when alarm was triggered
 		msDelay(5);
 	}
 	else

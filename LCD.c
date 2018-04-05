@@ -25,7 +25,6 @@ void SendByte (byte data)
 {
 	Set4Bit(data); //send first 4 bits
 	Set4Bit(data<<4); // send second 4 bits
-	//cbi(PORTB,5); // turn off boarduino LED
 }
 void printByte (byte command)
 {

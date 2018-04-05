@@ -1,13 +1,11 @@
 #include "itoa.h"
 
-
-
 void int_itoa( int n , char s[])
 {
 	int i ,sign;
 
-	if((sign = n) < 0) // record s i gn
-		n = -n ; // make n p o s i t i v e
+	if((sign = n) < 0) //record sign
+		n = -n ; // make n positive
 
 	i = 0 ;
 
@@ -64,10 +62,10 @@ void alarm_itoa( int n , char s[])
 {
 	int i ,sign;
 
-	if((sign = n) < 0) // record s i gn
-		n = -n ; // make n p o s i t i v e
+	if((sign = n) < 0) // record sign
+		n = -n ; // make n positive
 
-	if (n < 10)
+	if (n < 10) //if only 1 digit, we want 0 in front of it
 	{
 		i = 1;
 		s[0] = '0';

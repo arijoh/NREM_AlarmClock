@@ -6,7 +6,7 @@
 
 void setup()
 {
-	setupI2C(); //TWI SDA clock set
+	setupI2C();
 	setupLCD();
 	setupButtons();
 	setupUart();
@@ -16,17 +16,16 @@ void setup()
 
 void setupButtons()
 {
-	DDRD &= ~(1 << PD2);
-	DDRD &= ~(1 << PD7);
-	DDRD &= ~(1 << PD6);
-	DDRD &= ~(1 << PD5);
+	DDRD &= ~(1 << PD2); //interrupt button
+	DDRD &= ~(1 << PD7); //confirm button
+	DDRD &= ~(1 << PD6); //plus button
+	DDRD &= ~(1 << PD5); //minus button
 }
 
 void setupUart()  //set baud rate, enable tx,tx communications
 {
 	UBRR0H=0;
 	UBRR0L=207; //we select UBRR0L=207 for 4800 BAUD.
-
 	// enable receiver and transmitter , Rx complete interruptenable
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0) ;
 	UCSR0C=(1<<USBS0)|(3<<UCSZ00); // set frame format
@@ -57,14 +56,11 @@ void setupLCD()
 {
 	setPorts(); //set port output for LCD
 	printByte(0x33); //Turns on display and cursor. Entire display is in space mode because of initialization.
-	printByte(0x32); // 4bit input mode
-	printByte(0x28); // 2 line, 5x7 matrix
-	printByte(0x0C); // turn cursor off (0x0E to enable)
-	printByte(0x06); // cursor direction = right
-	printByte(0x01); // start with clear display
-	msDelay(3); // wait for LCD to initialize
+	printByte(0x32); // 4-bit
+	printByte(0x28); // 2 line
+	printByte(0x0C); // turn cursor off
+	printByte(0x06); // direction of cursor
+	printByte(0x01); // clear display
+	msDelay(3);
 	clearLCD();
-
 }
-
-

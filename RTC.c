@@ -111,7 +111,6 @@ void LCD_TimeDate()
 	dispTime();
 	LCDline(1);
 	dispDay();
-	//LCD_line(4,1);
 	dispDays();
 }
 

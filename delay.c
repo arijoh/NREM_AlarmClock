@@ -1,6 +1,6 @@
 #include "delay.h"
 
-void msDelay(long unsigned int miS ) //delay function
+void msDelay(long unsigned int miS ) //delay function for ms
 {
 	unsigned volatile long ulMax , ulCount ;
 	ulMax = 380 * miS ;
@@ -10,7 +10,7 @@ void msDelay(long unsigned int miS ) //delay function
 	}
 }
 
-void usDelay(long unsigned int uiS ) //delay function
+void usDelay(long unsigned int uiS ) //delay function for us
 {
 	unsigned volatile long ulMax , ulCount ;
 	ulMax = 19 * uiS ;

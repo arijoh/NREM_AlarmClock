@@ -19,9 +19,9 @@ byte writeAddress (byte address) //write to address
 	return ((TWSR & 0xF8) !=0x28); //1 for success, 0 for failure in communications.
 }
 
-void writeRegister(byte busAddr, byte reg, byte data)
+void writeRegister(byte address, byte reg, byte data)
 {
-	startI2C(busAddr);
+	startI2C(address);
 	writeAddress(reg); // first byte = device register address
 	writeAddress(data); // second byte = data for device register
 	STOP();

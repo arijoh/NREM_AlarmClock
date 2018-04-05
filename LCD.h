@@ -1,8 +1,8 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#include <avr/io.h> // deal with port registers
-typedef uint8_t byte; // I just like byte
+#include <avr/io.h>
+typedef uint8_t byte;
 
 #define cbi(x,y) x &= ~(1<<y) //_BV(y) // equivalent to cbi(x,y)
 #define sbi(x,y) x |= (1<<y) //)_BV(y) // equivalent to sbi(x,y)

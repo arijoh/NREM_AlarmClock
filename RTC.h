@@ -1,11 +1,10 @@
 #ifndef RTC_H_
 #define RTC_H_
 
-#include <avr/io.h> // deal with port registers
-typedef uint8_t byte; // I just like byte
+#include <avr/io.h>
+typedef uint8_t byte;
 
-
-#define RTC 0xD0
+#define RTC 0xD0 //address of RTC
 
 void readTime(byte *hours, byte *minutes, byte *seconds);//pointers are made with data and when called the function their address is returned (&)
 void readDate(byte *months, byte *days, byte *years);
