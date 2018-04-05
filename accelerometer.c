@@ -107,7 +107,7 @@ void compare(char triggerHour[], char triggerMin[])
 
 	oldhour = i_triggerHour;
 
-	if ((delta < 30) & (counter >= 3)) //if 30 min or less until alarm and 3 or more movements in the same hour -> alarm
+	if ((delta < 60) & (counter >= 3)) //if 60 min or less until alarm and 3 or more movements in the same hour -> alarm
 	{
 		alarm();
 		UART_Transmit_String("W"); //sends W with uart to mark when alarm was triggered

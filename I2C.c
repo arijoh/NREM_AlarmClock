@@ -33,7 +33,6 @@ byte readRegister(byte address, byte reg)
 	startI2C(address); //Send to address
 	writeAddress(reg); // write to register
 	startI2C(address+1); // write to address+1 = read mode
-	//data = readNack(); //receive data by looking for NACK reply
 	TWCR = (1<<TWINT)|(1<<TWEN);
 	while (!(TWCR & 0x80));
 	data = TWDR;
